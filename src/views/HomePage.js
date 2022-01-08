@@ -1,11 +1,18 @@
 import PageHeading from "../components/PageHeading/PageHeading";
 import { useEffect, useState } from "react";
 import * as movieApi from "../services/movie-api";
-import { NavLink, Link, Route, useRouteMatch } from "react-router-dom";
+import {
+  NavLink,
+  Link,
+  Route,
+  useRouteMatch,
+  useLocation,
+} from "react-router-dom";
 
 export default function HomePage() {
   const [trendingMovies, settrendingMovies] = useState(null);
   const { url } = useRouteMatch(); //используется для динамического определения текущего url
+  const location = useLocation();
 
   useEffect(() => {
     movieApi.fetchTrendingMovies().then((res) => {
@@ -22,7 +29,16 @@ export default function HomePage() {
         <ul>
           {trendingMovies.map((movie) => (
             <li key={movie.id}>
-              <Link to={`${url}movies/${movie.id}`}>{movie.title}</Link>
+              <Link
+                to={{
+                  pathname: `${url}movies/${movie.id}`,
+                  state: {
+                    from: { location, label: "Back to Trendings today" },
+                  },
+                }}
+              >
+                {movie.title}
+              </Link>
             </li>
           ))}
         </ul>

@@ -5,10 +5,16 @@ import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 import MoviesList from "../MoviesList/MoviesList";
 import * as moviesAPI from "../../services/movie-api";
+import { useHistory, useLocation } from "react-router-dom";
 
 function MoviesPage() {
   const [query, setQuery] = useState("");
   const [list, setList] = useState(null);
+  const history = useHistory();
+  const location = useLocation();
+
+  const getQueryFromSearchParams =
+    new URLSearchParams(location.search).get("query") ?? "";
 
   const handleFormSubmit = (newQuery) => {
     // console.log(query);
@@ -16,9 +22,14 @@ function MoviesPage() {
   };
 
   useEffect(() => {
+    setQuery(getQueryFromSearchParams);
+  }, []);
+
+  useEffect(() => {
     console.log("query", query);
     if (query.trim() === "") return;
     moviesAPI.fetchMoviesByQuery(query).then((res) => setList(res.results));
+    history.push({ ...location, search: `query=${query}` });
   }, [query]);
 
   useEffect(() => {

@@ -1,0 +1,1 @@
+{"version":3,"sources":["webpack://src/components/Cast/Cast.module.css"],"names":[],"mappings":"AAAA,uBACE,WAAY,CAEZ,QAAS,CACT,SAAU,CACV,gBACF,CAEA,iBACE,UACF","file":"7.bb6a8da1.chunk.css","sourcesContent":[".img_block {\r\n  width: 100px;\r\n  /* height: 100px; */\r\n  margin: 0;\r\n  padding: 0;\r\n  border-width: 1px;\r\n}\r\n\r\n.img {\r\n  width: 100%;\r\n}\r\n"]}

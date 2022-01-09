@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import {
   NavLink,
   Route,
@@ -10,8 +10,11 @@ import {
 import PageHeading from "../PageHeading/PageHeading";
 import * as bookShelfAPI from "../../services/movie-api";
 import s from "./MovieDetailsPage.module.css";
-import Cast from "../Cast/Cast";
-import Reviews from "../Reviews/Reviews";
+// import Cast from "../Cast/Cast";
+// import Reviews from "../Reviews/Reviews";
+
+const Cast = lazy(() => import("../Cast/Cast"));
+const Reviews = lazy(() => import("../Reviews/Reviews"));
 
 export default function MovieDetailsPage() {
   const { movieId } = useParams();
@@ -58,21 +61,39 @@ export default function MovieDetailsPage() {
 
           <hr />
 
-          <NavLink to={`${url}/cast`}>Cast</NavLink>
+          <NavLink
+            to={{
+              pathname: `${url}/cast`,
+              state: { from: location.state.from },
+            }}
+          >
+            Cast
+          </NavLink>
+
           <br />
-          <NavLink to={`${url}/reviews`}>Reviews</NavLink>
+
+          <NavLink
+            to={{
+              pathname: `${url}/reviews`,
+              state: { from: location.state.from },
+            }}
+          >
+            Reviews
+          </NavLink>
 
           <hr />
         </>
       )}
 
-      <Route path={`${path}/cast`}>
-        <Cast movieId={movieId} />
-      </Route>
+      <Suspense fallback={<h1>LOADING...</h1>}>
+        <Route path={`${path}/cast`}>
+          <Cast movieId={movieId} />
+        </Route>
 
-      <Route path={`${path}/reviews`}>
-        <Reviews movieId={movieId} />
-      </Route>
+        <Route path={`${path}/reviews`}>
+          <Reviews movieId={movieId} />
+        </Route>
+      </Suspense>
     </>
   );
 }
